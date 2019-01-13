@@ -64,6 +64,46 @@ class MDTOC(object):
     self.linked: bool = linked
     # Set the lines' property based on the return value of the get_file_contents function.
     self.lines: Strings = self.get_file_contents(file)
+    # Create the regexp object used to match lines.
+    self.heading_re = re.compile("^\s*#+\\s.*$")
+    # This list will hold each matched line.
+# Call the 'get_headings' function to get all headings from the document.
+    self.headings: Strings = self.get_headings()
+    # Next, get a list of MDTOCItems using the 'get_items' function.
+    self.items = self.get_items()
+  
+# This function uses re to find all headings within the markdown document.
+  def get_headings(self) -> Strings:
+# Initialise the list of headings.
+    headings: Strings = []
+    # Loop through all the lines of the file.
+    for line in self.lines:
+      # Trim out any unneeded whitespace.
+      line = line.strip()
+      # Match the line to the heading re.
+      match = heading_re.match(line)
+      # Check if this line matches the heading pattern.
+      if bool(match) == True:
+        # We have a match, so add it to our list of headings.
+        headings.append(line)
+# Return the list of headings.
+    return headings
+  
+  # This function generates and returns a list of MDTOCItem objects to be used to generate the table of contents.
+  def get_items(self) -> List[MDTOCItem]:
+# Initialise the items list.
+    items: List[MDTOCItem] = []
+    # Now that we have all the headings in the document, loop through them.
+    for heading in self.headings:
+      # Find out what level of heading this is by getting the amount of '#' characters at the start.
+      whitespace_re = re.compile("\s")
+      words: Strings = whitespace_re.split(heading)
+      level: int = len(words[0])
+      # Next, create an MDTOCItem object representing this item.
+      li: MDTOCItem = MDTOCItem(level, words[1:])
+      items.append(li)
+    # Finally, return the list of list items.
+    return items
   
 # This function takes either a path or a file object, returning always the file's contents.
   def get_file_contents(file: File) -> Strings:
@@ -79,30 +119,3 @@ class MDTOC(object):
       line_endings = "\n"
     lines: Strings = text.split(line_endings)
     return lines
-
-# Create the regexp object used to match lines.
-heading_re = re.compile("^\s*#+\\s.*$")
-# This list will hold each matched line.
-headings = []
-
-# Loop through all the lines of standard input
-for line in sys.stdin.read().split("\n"):
-  # Trim out any unneeded whitespace.
-  line = line.strip()
-  # Match the line to the heading re.
-  match = heading_re.match(line)
-  # Check if this line matches the heading pattern.
-  if bool(match) == True:
-    # We have a match, so add it to our list of headings.
-    headings.append(line)
-
-# Now that we have all the headings in the document, loop through them.
-for heading in headings:
-  # Find out what level of heading this is by getting the amount of '#' characters at the start.
-  whitespace_re = re.compile("\s")
-  words = whitespace_re.split(heading)
-  level = len(words[0])
-# Next, create an MDTOCItem object representing this item.
-  li = MDTOCItem(level, words[1:])
-# Finally, print out this list item's markdown representation.
-  print(li.get_list_item_nonlinked())
