@@ -18,34 +18,37 @@
 
 # import the sys module for standard IO and the re module for parsing regular expressions
 import sys, re
+# Import some bits and pieces from the typing module to be used with type hints
+from typing import List
 
 # Create the MDTOCItem class, which represents an item on the table of contents.
 class MDTOCItem(object):
   # This is the constructor function, which sets up the object.
-  def __init__(self, level, title):
+  def __init__(self, level: int, title: List[str]):
 # Set some important properties.
-    self.level = level
-    self.title = title
+    self.level: int = level
+    self.title: List[str] = title
   
 # This function joins a given list of strings with a given separator.
-  def join(self, words, separator=" "):
+  def join(self, words: List[str], separator: str=" "):
     # Initialise the text variable to an empty string.
-    text = ""
+    text: str = ""
     # Loop through each of the words.
     for word in words:
       # Append the word, as well as a proceeding separator, to the text variable.
       text += separator + word
     # Remove the first proceeding separator from text and then return it.
-    separator_end = len(separator)
+    separator_end: int = len(separator)
     text = text[separator_end:]
     return text
   
+
   # This function returns a non-linked list item representing this list item. 
   def get_list_item_nonlinked(self):
 # First, get a textual representation of the title.
-    title_text = self.join(self.title, " ")
+    title_text: str = self.join(self.title, " ")
 # Next, create white space based on the level of the item. We use 'level - 1' here so that level 1 items are not indented at all.
-    whitespace = "\t" * (self.level - 1)
+    whitespace: str = "\t" * (self.level - 1)
 # Finally, return the full list item.
     return whitespace + "* " + title_text
 
