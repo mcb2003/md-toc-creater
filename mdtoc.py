@@ -21,16 +21,19 @@ import sys, re
 # Import some bits and pieces from the typing module to be used with type hints
 from typing import List
 
+# This variable is a type hint alias that defines a list of words.
+Words = List[str]
+
 # Create the MDTOCItem class, which represents an item on the table of contents.
 class MDTOCItem(object):
   # This is the constructor function, which sets up the object.
-  def __init__(self, level: int, title: List[str]):
+  def __init__(self, level: int, title: Words):
 # Set some important properties.
     self.level: int = level
-    self.title: List[str] = title
+    self.title: Words = title
   
 # This function joins a given list of strings with a given separator.
-  def join(self, words: List[str], separator: str=" ") -> str:
+  def join(self, words: Words, separator: str=" ") -> str:
     # Initialise the text variable to an empty string.
     text: str = ""
     # Loop through each of the words.
