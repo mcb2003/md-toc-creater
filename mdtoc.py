@@ -30,7 +30,7 @@ class MDTOCItem(object):
     self.title: List[str] = title
   
 # This function joins a given list of strings with a given separator.
-  def join(self, words: List[str], separator: str=" "):
+  def join(self, words: List[str], separator: str=" ") -> str:
     # Initialise the text variable to an empty string.
     text: str = ""
     # Loop through each of the words.
@@ -44,7 +44,7 @@ class MDTOCItem(object):
   
 
   # This function returns a non-linked list item representing this list item. 
-  def get_list_item_nonlinked(self):
+  def get_list_item_nonlinked(self) -> str:
 # First, get a textual representation of the title.
     title_text: str = self.join(self.title, " ")
 # Next, create white space based on the level of the item. We use 'level - 1' here so that level 1 items are not indented at all.
