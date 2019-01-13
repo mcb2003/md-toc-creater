@@ -28,7 +28,7 @@ class MDTOCItem(object):
     self.title = title
   
 # This function joins a given list of strings with a given separator.
-  def join(self, words, separator):
+  def join(self, words, separator=" "):
     # Initialise the text variable to an empty string.
     text = ""
     # Loop through each of the words.
