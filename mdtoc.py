@@ -19,6 +19,20 @@
 # import the sys module for standard IO and the re module for parsing regular expressions
 import sys, re
 
+## Function Definitions:
+
+# This function joins a given list of strings with spaces.
+def join(words):
+  # Initialise the text variable to an empty string.
+  text = ""
+  # Loop through each of the words.
+  for word in words[1:]:
+    # Append the word, as well as a proceeding space, to the text variable.
+    text += " " + word
+  # Return the trimmed up version of the text variable.
+  return text.strip()
+
+
 # Create the regexp object used to match lines.
 heading_re = re.compile("^\s*#+\\s.*$")
 # This list will hold each matched line.
@@ -42,11 +56,8 @@ for heading in headings:
   words = whitespace_re.split(heading)
   level = len(words[0])
 # This level will determine the indentation of our list item, so create this whitespace now.
-  whitespace = "\t" * level - 1
-# Create the text for the list item.
-  text = ""
-  for word in words[1:]:
-    text += " " + word
-  text = text.strip()
+  whitespace = "\t" * (level - 1)
+# Create the text for the list item using the join function we made earlier.
+  text = join(words[1:])
 # Finally, print out the list item.
   print(whitespace + "* " + text)
