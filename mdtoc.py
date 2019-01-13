@@ -19,21 +19,35 @@
 # import the sys module for standard IO and the re module for parsing regular expressions
 import sys, re
 
-## Function Definitions:
-
+# Create the MDTOCItem class, which represents an item on the table of contents.
+class MDTOCItem(object):
+  # This is the constructor function, which sets up the object.
+  def __init__(self, level, title):
+# Set some important properties.
+    self.level = level
+    self.title = title
+  
 # This function joins a given list of strings with a given separator.
-def join(words, separator):
-  # Initialise the text variable to an empty string.
-  text = ""
-  # Loop through each of the words.
-  for word in words:
-    # Append the word, as well as a proceeding separator, to the text variable.
-    text += separator + word
-  # Remove the first proceeding separator from text and then return it.
-  separator_end = len(separator)
-  text = text[separator_end:]
-  return text
-
+  def join(self, words, separator):
+    # Initialise the text variable to an empty string.
+    text = ""
+    # Loop through each of the words.
+    for word in words:
+      # Append the word, as well as a proceeding separator, to the text variable.
+      text += separator + word
+    # Remove the first proceeding separator from text and then return it.
+    separator_end = len(separator)
+    text = text[separator_end:]
+    return text
+  
+  # This function returns a non-linked list item representing this list item. 
+  def get_list_item_nonlinked(self):
+# First, get a textual representation of the title.
+    title_text = self.join(self.title, " ")
+# Next, create white space based on the level of the item. We use 'level - 1' here so that level 1 items are not indented at all.
+    whitespace = "\t" * (self.level - 1)
+# Finally, return the full list item.
+    return whitespace + "* " + title_text
 
 # Create the regexp object used to match lines.
 heading_re = re.compile("^\s*#+\\s.*$")
@@ -57,9 +71,7 @@ for heading in headings:
   whitespace_re = re.compile("\s")
   words = whitespace_re.split(heading)
   level = len(words[0])
-# This level will determine the indentation of our list item, so create this whitespace now.
-  whitespace = "\t" * (level - 1)
-# Create the text for the list item using the join function we made earlier.
-  text = join(words[1:], " ")
-# Finally, print out the list item.
-  print(whitespace + "* " + text)
+# Next, create an MDTOCItem object representing this item.
+  li = MDTOCItem(level, words[1:])
+# Finally, print out this list item's markdown representation.
+  print(li.get_list_item_nonlinked())
