@@ -42,7 +42,7 @@ for heading in headings:
   words = whitespace_re.split(heading)
   level = len(words[0])
 # This level will determine the indentation of our list item, so create this whitespace now.
-  whitespace = "\t" * level
+  whitespace = "\t" * level - 1
 # Create the text for the list item.
   text = ""
   for word in words[1:]:
