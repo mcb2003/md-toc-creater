@@ -29,10 +29,11 @@ File = Union[str, IO['TextIO']]
 # Create the MDTOCItem class, which represents an item on the table of contents.
 class MDTOCItem(object):
   # This is the constructor function, which sets up the object.
-  def __init__(self, level: int, title: Strings):
+  def __init__(self, level: int, title: Strings, min_indent: int=1):
 # Set some important properties.
     self.level: int = level
     self.title: Strings = title
+    self.min_indent: int = min(1, min_indent)
   
 # This function joins a given list of strings with a given separator.
   def join(self, words: Strings, separator: str=" ") -> str:
@@ -51,17 +52,18 @@ class MDTOCItem(object):
   def get_list_item_nonlinked(self) -> str:
 # First, get a textual representation of the title.
     title_text: str = self.join(self.title, " ")
-# Next, create white space based on the level of the item. We use 'level - 1' here so that level 1 items are not indented at all.
-    whitespace: str = "\t" * (self.level - 1)
+# Next, create white space based on the level of the item and the minimum indent level.
+    whitespace: str = "\t" * (self.level - self.min_indent)
 # Finally, return the full list item.
     return whitespace + "* " + title_text
 
 # Create the MDTOC class, which handles everything to do with the table of contents.
 class MDTOC(object):
   # Define the constructor function.
-  def __init__(self, file: File, linked: bool=False):
+  def __init__(self, file: File, linked: bool=False, min_indent: int=1):
 # Set some important properties.
     self.linked: bool = linked
+    self.min_indent: int = min(1, min_indent)
     # Set the lines' property based on the return value of the get_file_contents function.
     self.lines: Strings = self.get_file_contents(file)
     # Create the regexp object used to match lines.
@@ -100,7 +102,7 @@ class MDTOC(object):
       words: Strings = whitespace_re.split(heading)
       level: int = len(words[0])
       # Next, create an MDTOCItem object representing this item.
-      li: MDTOCItem = MDTOCItem(level, words[1:])
+      li: MDTOCItem = MDTOCItem(level, words[1:], self.min_indent)
       items.append(li)
     # Finally, return the list of list items.
     return items
