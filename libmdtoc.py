@@ -48,7 +48,7 @@ class MDTOCItem(object):
     text = text[separator_end:]
     return text
   
-  # This function returns a non-linked list item representing this list item. 
+# This function returns a non-linked list item representing this list item. 
   def get_list_item_nonlinked(self) -> str:
 # First, get a textual representation of the title.
     title_text: str = self.join(self.title, " ")
@@ -56,7 +56,19 @@ class MDTOCItem(object):
     whitespace: str = "\t" * (self.level - self.min_indent)
 # Finally, return the full list item.
     return whitespace + "* " + title_text
+  
+  # This function returns a linked list item representing this list item. 
+  def get_list_item_linked(self) -> str:
+# First, get a textual representation of the title.
+    title_text: str = self.join(self.title, " ")
+# Also, get a textual representattion of a link reference to this heading.
+    title_reference: str = "#" + self.join(self.title, "-").lower()
+# Next, create white space based on the level of the item and the minimum indent level.
+    whitespace: str = "\t" * (self.level - self.min_indent)
+# Finally, return the full list item.
+    return whitespace + "* [" + title_text + "](" + title_reference + ")"
 
+  
 # Create the MDTOC class, which handles everything to do with the table of contents.
 class MDTOC(object):
   # Define the constructor function.
@@ -126,7 +138,11 @@ class MDTOC(object):
     for item in self.items:
       # Check whether we need to return linked or non-linked list items as part of the TOC.
       if self.linked == False:
-      # Append the returned text of the current item's to the lines list, as well as a new line to make outputting this easier.
+      # Append the returned text of the current item's to the lines list.
         lines.append(item.get_list_item_nonlinked())
+      # If we do want links:
+      else:
+      # Append the returned text of the current item's to the lines list.
+        lines.append(item.get_list_item_linked())
     # Finally, return the lines.
     return lines
