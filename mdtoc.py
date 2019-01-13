@@ -19,21 +19,23 @@
 # import the sys module for standard IO and the re module for parsing regular expressions
 import sys, re
 # Import some bits and pieces from the typing module to be used with type hints
-from typing import List
+from typing import List, IO, Union
 
 # This variable is a type hint alias that defines a list of words.
-Words = List[str]
+Strings = List[str]
+# This alias specifies a type of either a file object or a string (path to a file).
+File = Union[str, IO['TextIO']]
 
 # Create the MDTOCItem class, which represents an item on the table of contents.
 class MDTOCItem(object):
   # This is the constructor function, which sets up the object.
-  def __init__(self, level: int, title: Words):
+  def __init__(self, level: int, title: Strings):
 # Set some important properties.
     self.level: int = level
-    self.title: Words = title
+    self.title: Strings = title
   
 # This function joins a given list of strings with a given separator.
-  def join(self, words: Words, separator: str=" ") -> str:
+  def join(self, words: Strings, separator: str=" ") -> str:
     # Initialise the text variable to an empty string.
     text: str = ""
     # Loop through each of the words.
@@ -45,7 +47,6 @@ class MDTOCItem(object):
     text = text[separator_end:]
     return text
   
-
   # This function returns a non-linked list item representing this list item. 
   def get_list_item_nonlinked(self) -> str:
 # First, get a textual representation of the title.
@@ -54,6 +55,26 @@ class MDTOCItem(object):
     whitespace: str = "\t" * (self.level - 1)
 # Finally, return the full list item.
     return whitespace + "* " + title_text
+
+# Create the MDTOC class, which handles everything to do with the table of contents.
+class MDTOC(object):
+  # Define the constructor function.
+  def __init__(self, file: File, linked: bool=False):
+# Set some important properties.
+    self.linked: bool = linked
+    # Set the lines' property based on the return value of the get_file_contents function.
+    self.lines: Strings = self.get_file_contents(file)
+  
+# This function takes either a path or a file object, returning always the file's contents.
+  def get_file_contents(file: File) -> Strings:
+    # Check if the passed 'file' argument is a string.
+    if type(file) == str:
+      # It is, so open a file with this path.
+      file: IO['TextIO'] = open(file, "r")
+    # We've got a file object regardless now, so return it's contents as a list of lines.
+    text: str = file.read()
+    lines: Strings = text.split("\n")
+    return lines
 
 # Create the regexp object used to match lines.
 heading_re = re.compile("^\s*#+\\s.*$")
