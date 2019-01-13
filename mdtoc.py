@@ -41,7 +41,6 @@ arg_parser.add_argument("-n", "--no-links",
 # This argument defines the minimum heading level for which the indentation will be 0. Headings at or below this level will not be indented.
 arg_parser.add_argument("-m", "--min-heading-indent",
   help="Specify the minimum level of heading for which the list items will be indented. Headings at or below this level will not be indented and the rest of the heading levels will be adjusted accordingly. The default is 1.",
-  nargs="?",
   type=int,
   choices=range(1,7),
   default=1
@@ -54,6 +53,5 @@ args = arg_parser.parse_args()
 # Create an MDTOC object with the parsed options.
 tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(args.input, not args.no_links, args.min_heading_indent)
 # Get the text representing the contents and print it to the standard output.
-lines = tocobj.get_toc()
-for line in lines:
-  print(line)
+text = tocobj.get_toc()
+print(text)

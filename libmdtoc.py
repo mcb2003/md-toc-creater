@@ -35,7 +35,7 @@ class MDTOCItem(object):
 # Set some important properties.
     self.level: int = level
     self.title: Strings = title
-    self.min_indent: int = min(1, min_indent)
+    self.min_indent: int = max(0, min_indent)
   
 # This function joins a given list of strings with a given separator.
   def join(self, words: Strings, separator: str=" ") -> str:
@@ -77,7 +77,7 @@ class MDTOC(object):
   def __init__(self, file: File, linked: bool=False, min_indent: int=1):
 # Set some important properties.
     self.linked: bool = linked
-    self.min_indent: int = min(1, min_indent)
+    self.min_indent: int = max(0, min_indent)
     # Set the lines' property based on the return value of the get_file_contents function.
     self.lines: Strings = self.get_file_contents(file)
     # Create the regexp object used to match lines.
