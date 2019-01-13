@@ -20,5 +20,9 @@
 import libmdtoc
 # Also include the argparse module to parse command line arguments.
 import argparse
-# We also need argv from the sys module.
-from sys import argv
+
+arg_parser = argparse.ArgumentParser("MD TOC",
+    description="Generate a table of contents for a markdown document",
+  epilog="Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new"
+)
+args = arg_parser.parse_args()
