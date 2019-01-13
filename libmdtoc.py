@@ -18,6 +18,8 @@
 
 # import the sys module for standard IO and the re module for parsing regular expressions.
 import sys, re
+# We'll also need the line separator which varies depending on your operating system.
+from os import linesep
 # Import some bits and pieces from the typing module to be used with type hints
 from typing import List, IO, Union
 
@@ -133,16 +135,16 @@ class MDTOC(object):
   # This function returns the markdown representation of the table of contents.
   def get_toc(self) -> Strings:
     # Initiate the text variable to hold the returned TOC.
-    lines: Strings = []
+    text: str = ""
     # Loop through all of the list items in the items list.
     for item in self.items:
       # Check whether we need to return linked or non-linked list items as part of the TOC.
       if self.linked == False:
       # Append the returned text of the current item's to the lines list.
-        lines.append(item.get_list_item_nonlinked())
+        text += item.get_list_item_nonlinked() + linesep
       # If we do want links:
       else:
       # Append the returned text of the current item's to the lines list.
-        lines.append(item.get_list_item_linked())
-    # Finally, return the lines.
-    return lines
+        text += item.get_list_item_linked() + linesep
+    # Finally, return the text.
+    return text
