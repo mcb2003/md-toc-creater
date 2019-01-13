@@ -21,16 +21,18 @@ import sys, re
 
 ## Function Definitions:
 
-# This function joins a given list of strings with spaces.
-def join(words):
+# This function joins a given list of strings with a given separator.
+def join(words, separator):
   # Initialise the text variable to an empty string.
   text = ""
   # Loop through each of the words.
-  for word in words[1:]:
-    # Append the word, as well as a proceeding space, to the text variable.
-    text += " " + word
-  # Return the trimmed up version of the text variable.
-  return text.strip()
+  for word in words:
+    # Append the word, as well as a proceeding separator, to the text variable.
+    text += separator + word
+  # Remove the first proceeding separator from text and then return it.
+  separator_end = len(separator)
+  text = text[separator_end:]
+  return text
 
 
 # Create the regexp object used to match lines.
@@ -58,6 +60,6 @@ for heading in headings:
 # This level will determine the indentation of our list item, so create this whitespace now.
   whitespace = "\t" * (level - 1)
 # Create the text for the list item using the join function we made earlier.
-  text = join(words[1:])
+  text = join(words[1:], " ")
 # Finally, print out the list item.
   print(whitespace + "* " + text)
