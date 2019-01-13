@@ -18,5 +18,7 @@
 
 # include the needed library file.
 import libmdtoc
-
-
+# Also include the argparse module to parse command line arguments.
+import argparse
+# We also need argv from the sys module.
+from sys import argv
