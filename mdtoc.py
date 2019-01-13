@@ -44,4 +44,6 @@ args = arg_parser.parse_args()
 # Create an MDTOC object with the parsed options.
 tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(args.input, not args.no_links)
 # Get the text representing the contents and print it to the standard output.
-sys.stdout.write(tocobj.get_toc())
+lines = tocobj.get_toc()
+for line in lines:
+  print(line)
