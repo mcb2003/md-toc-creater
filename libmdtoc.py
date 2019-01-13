@@ -83,7 +83,7 @@ class MDTOC(object):
       # Trim out any unneeded whitespace.
       line = line.strip()
       # Match the line to the heading re.
-      match = heading_re.match(line)
+      match = self.heading_re.match(line)
       # Check if this line matches the heading pattern.
       if bool(match) == True:
         # We have a match, so add it to our list of headings.
@@ -108,7 +108,7 @@ class MDTOC(object):
     return items
   
 # This function takes either a path or a file object, returning always the file's contents.
-  def get_file_contents(file: File) -> Strings:
+  def get_file_contents(self, file: File) -> Strings:
     # Check if the passed 'file' argument is a string.
     if type(file) == str:
       # It is, so open a file with this path.
