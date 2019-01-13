@@ -35,4 +35,18 @@ for line in sys.stdin.read().split("\n"):
     # We have a match, so add it to our list of headings.
     headings.append(line)
 
-print(headings)
+# Now that we have all the headings in the document, loop through them.
+for heading in headings:
+  # Find out what level of heading this is by getting the amount of '#' characters at the start.
+  whitespace_re = re.compile("\s")
+  words = whitespace_re.split(heading)
+  level = len(words[0])
+# This level will determine the indentation of our list item, so create this whitespace now.
+  whitespace = "\t" * level
+# Create the text for the list item.
+  text = ""
+  for word in words[1:]:
+    text += " " + word
+  text = text.strip()
+# Finally, print out the list item.
+  print(whitespace + "* " + text)
