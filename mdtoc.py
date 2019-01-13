@@ -26,11 +26,11 @@ arg_parser = argparse.ArgumentParser("MD TOC",
     description="Generate a table of contents for a markdown document",
   epilog="Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new"
 )
-# This argument defines wwhat file (default stdout) to write the TOC to.
-arg_parser.add_argument("file",
-  help="The file to output the table of contents to. By default, output to standard output.",
-  type=argparse.FileType('w'),
-  default=sys.stdout,
+# This argument defines what file (default stdout) to write the TOC to.
+arg_parser.add_argument("input",
+  help="The markdown file to read.",
+  type=argparse.FileType('r'),
+  default=sys.stdin,
   nargs="?"
 )
 # This argument specifies whether to output the TOC items as links to their sections or as simple plane text.
