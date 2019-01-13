@@ -18,11 +18,21 @@
 
 # include the needed library file.
 import libmdtoc
-# Also include the argparse module to parse command line arguments.
-import argparse
+# Also include the argparse module to parse command line arguments and sys to get access to stdio.
+import argparse, sys
 
 arg_parser = argparse.ArgumentParser("MD TOC",
     description="Generate a table of contents for a markdown document",
   epilog="Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new"
+)
+arg_parser.add_argument("file",
+  help="The file to output the table of contents to. By default, output to standard output.",
+  type=argparse.FileType('w'),
+  default=sys.stdout,
+  nargs="?"
+)
+arg_parser.add_argument("-n", "--no-links",
+  help="Do not link the sections of the document to their list items in the table of contents.",
+  action="store_true"
 )
 args = arg_parser.parse_args()
