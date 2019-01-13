@@ -38,6 +38,14 @@ arg_parser.add_argument("-n", "--no-links",
   help="Do not link the sections of the document to their list items in the table of contents.",
   action="store_true"
 )
+# This argument defines the minimum heading level for which the indentation will be 0. Headings at or below this level will not be indented.
+arg_parser.add_argument("-m", "--min-heading-indent",
+  help="Specify the minimum level of heading for which the list items will be indented. Headings at or below this level will not be indented and the rest of the heading levels will be adjusted accordingly. The default is 1.",
+  nargs="?",
+  choices=range(1,7)
+  )
+
+
 # Parse the arguments passed to the script.
 args = arg_parser.parse_args()
 
