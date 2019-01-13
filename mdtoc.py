@@ -73,7 +73,11 @@ class MDTOC(object):
       file: IO['TextIO'] = open(file, "r")
     # We've got a file object regardless now, so return it's contents as a list of lines.
     text: str = file.read()
-    lines: Strings = text.split("\n")
+# Check what type of line endings we have and adjust accordingly.
+    line_endings: str = file.newlines
+    if file.newlines == None:
+      line_endings = "\n"
+    lines: Strings = text.split(line_endings)
     return lines
 
 # Create the regexp object used to match lines.
