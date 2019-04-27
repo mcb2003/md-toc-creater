@@ -27,7 +27,7 @@ arg_parser = argparse.ArgumentParser("MD TOC",
                                      description="Generate a table of contents for a markdown document",
                                      epilog="Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new"
                                      )
-# This argument defines what file (default stdout) to write the TOC to.
+# This argument defines what file (default stdin) to read  the TOC from.
 arg_parser.add_argument("input",
                         help="The markdown file to read.",
                         type=argparse.FileType('r'),
@@ -53,6 +53,12 @@ arg_parser.add_argument("-M", "--max-indent",
                         choices=range(0, 7),
                         default=6
                         )
+# This argument defines what file (default stdin) to read  the TOC from.
+arg_parser.add_argument("-o", "--output",
+                        help="The markdown file to write the table of contents to. The default is standard output.",
+                        type=argparse.FileType('w'),
+                        default=sys.stdout
+                        )
 # This argument allows the exclusion of specific heading levels from the TOC. It can be repeated to exclude multiple levels.
 arg_parser.add_argument("-x", "--exclude",
                         help="Specify specific levels of heading to exclude from the table of contents. This option can be repeated to exclude multiple levels.",
@@ -70,4 +76,4 @@ tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(
     args.input, not args.no_links, args.min_indent, args.max_indent, args.exclude)
 # Get the text representing the contents and print it to the standard output.
 text = tocobj.get_toc()
-print(text)
+print(text, file=args.output)
