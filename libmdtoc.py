@@ -35,11 +35,15 @@ File = Union[str, IO['TextIO']]
 
 class MDTOCItem(object):
     # This is the constructor function, which sets up the object.
-    def __init__(self, level: int, title: Strings, min_indent: int = 1):
+    def __init__(self, level: int, title: Strings, min_indent: int = 1, max_indent: int = 6):
         # Set some important properties.
         self.title: Strings = title
         self.level: int = level
         self.min_indent: int = max(0, min_indent)
+        self.max_indent: int = max(0, max_indent)
+        # This computed physical level is the actual indentation level of the item, with min and max indents taken into account.
+        self.physical_level: int = min(
+            self.level - self.min_indent, self.max_indent)
 
 # This function joins a given list of strings with a given separator.
     def join(self, words: Strings, separator: str = " ") -> str:
@@ -58,8 +62,8 @@ class MDTOCItem(object):
     def get_list_item_nonlinked(self) -> str:
         # First, get a textual representation of the title.
         title_text: str = self.join(self.title, " ")
-# Next, create white space based on the level of the item and the minimum indent level.
-        whitespace: str = "\t" * (self.level - self.min_indent)
+# Next, create white space based on the computed physical level.
+        whitespace: str = "\t" * self.physical_level
 # Finally, return the full list item.
         return whitespace + "* " + title_text
 
@@ -69,8 +73,8 @@ class MDTOCItem(object):
         title_text: str = self.join(self.title, " ")
 # Also, get a textual representation of a link reference to this heading.
         title_reference: str = "#" + self.join(self.title, "-").lower()
-# Next, create white space based on the level of the item and the minimum indent level.
-        whitespace: str = "\t" * (self.level - self.min_indent)
+# Next, create white space based on the computed physical level.
+        whitespace: str = "\t" * self.physical_level
 # Finally, return the full list item.
         return whitespace + "* [" + title_text + "](" + title_reference + ")"
 
@@ -79,10 +83,11 @@ class MDTOCItem(object):
 
 class MDTOC(object):
     # Define the constructor function.
-    def __init__(self, file: File, linked: bool = False, min_indent: int = 1):
+    def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6):
         # Set some important properties.
         self.linked: bool = linked
         self.min_indent: int = max(0, min_indent)
+        self.max_indent: int = max(0, max_indent)
         # Set the lines' property based on the return value of the get_file_contents function.
         self.lines: Strings = self.get_file_contents(file)
         # Create the regexp object used to match lines.
@@ -121,7 +126,8 @@ class MDTOC(object):
             words: Strings = whitespace_re.split(heading)
             level: int = len(words[0])
             # Next, create an MDTOCItem object representing this item.
-            li: MDTOCItem = MDTOCItem(level, words[1:], self.min_indent)
+            li: MDTOCItem = MDTOCItem(
+                level, words[1:], self.min_indent, self.max_indent)
             items.append(li)
         # Finally, return the list of list items.
         return items
