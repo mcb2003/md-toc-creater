@@ -34,11 +34,6 @@ arg_parser.add_argument("input",
                         default=sys.stdin,
                         nargs="?"
                         )
-# This argument specifies whether to output the TOC items as links to their sections or as simple plane text.
-arg_parser.add_argument("-n", "--no-links",
-                        help="Do not link the sections of the document to their list items in the table of contents.",
-                        action="store_true"
-                        )
 # This argument defines the minimum heading level for which the indentation will be 0. Headings at or below this level will not be indented.
 arg_parser.add_argument("-m", "--min-indent",
                         help="Specify the minimum level of heading for which the list items will be indented. Headings at or below this level will not be indented and the rest of the heading levels will be adjusted accordingly. The default is 1.",
@@ -52,6 +47,11 @@ arg_parser.add_argument("-M", "--max-indent",
                         type=int,
                         choices=range(0, 7),
                         default=6
+                        )
+# This argument specifies whether to output the TOC items as links to their sections or as simple plane text.
+arg_parser.add_argument("-n", "--no-links",
+                        help="Do not link the sections of the document to their list items in the table of contents.",
+                        action="store_true"
                         )
 # This argument defines what file (default stdin) to read  the TOC from.
 arg_parser.add_argument("-o", "--output",
