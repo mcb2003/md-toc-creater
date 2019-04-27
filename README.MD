@@ -31,5 +31,5 @@ optional arguments:
                         will not be indented any further; Thus, specifying 0
                         flattens the list. The default is 6.
 
-Submit any bugs to [https://github.com/mcb2003/md-toc-creater/issues/new](https://github.com/mcb2003/md-toc-creater/issues/new)
+Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new
 ```
