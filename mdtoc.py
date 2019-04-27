@@ -46,17 +46,19 @@ arg_parser.add_argument("-m", "--min-indent",
                         choices=range(1, 7),
                         default=1
                         )
+# This argument specifies the maximum level of heading for which the list items will be indented. Headings above this level will not be indented any further; Thus, specifying 0 flattens the list.
 arg_parser.add_argument("-M", "--max-indent",
                         help="Specify the maximum level of heading for which the list items will be indented. Headings above this level will not be indented any further; Thus, specifying 0 flattens the list. The default is 6.",
                         type=int,
                         choices=range(0, 7),
                         default=6
                         )
+# This argument allows the exclusion of specific heading levels from the TOC. It can be repeated to exclude multiple levels.
 arg_parser.add_argument("-x", "--exclude",
                         help="Specify specific levels of heading to exclude from the table of contents. This option can be repeated to exclude multiple levels.",
+                        metavar="LEVEL",
                         type=int,
-                        action="append",
-                        metavar="level"
+                        action="append"
                         )
 
 
