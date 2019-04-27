@@ -19,39 +19,41 @@
 # include the needed library file.
 import libmdtoc
 # Also include the argparse module to parse command line arguments and sys to get access to stdio.
-import argparse, sys
+import argparse
+import sys
 
 # Create an ArgumentParser object to parse the command line arguments.
 arg_parser = argparse.ArgumentParser("MD TOC",
-    description="Generate a table of contents for a markdown document",
-  epilog="Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new"
-)
+                                     description="Generate a table of contents for a markdown document",
+                                     epilog="Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new"
+                                     )
 # This argument defines what file (default stdout) to write the TOC to.
 arg_parser.add_argument("input",
-  help="The markdown file to read.",
-  type=argparse.FileType('r'),
-  default=sys.stdin,
-  nargs="?"
-)
+                        help="The markdown file to read.",
+                        type=argparse.FileType('r'),
+                        default=sys.stdin,
+                        nargs="?"
+                        )
 # This argument specifies whether to output the TOC items as links to their sections or as simple plane text.
 arg_parser.add_argument("-n", "--no-links",
-  help="Do not link the sections of the document to their list items in the table of contents.",
-  action="store_true"
-)
+                        help="Do not link the sections of the document to their list items in the table of contents.",
+                        action="store_true"
+                        )
 # This argument defines the minimum heading level for which the indentation will be 0. Headings at or below this level will not be indented.
-arg_parser.add_argument("-m", "--min-heading-indent",
-  help="Specify the minimum level of heading for which the list items will be indented. Headings at or below this level will not be indented and the rest of the heading levels will be adjusted accordingly. The default is 1.",
-  type=int,
-  choices=range(1,7),
-  default=1
-  )
+arg_parser.add_argument("-m", "--min-indent",
+                        help="Specify the minimum level of heading for which the list items will be indented. Headings at or below this level will not be indented and the rest of the heading levels will be adjusted accordingly. The default is 1.",
+                        type=int,
+                        choices=range(1, 7),
+                        default=1
+                        )
 
 
 # Parse the arguments passed to the script.
 args = arg_parser.parse_args()
 
 # Create an MDTOC object with the parsed options.
-tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(args.input, not args.no_links, args.min_heading_indent)
+tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(
+    args.input, not args.no_links, args.min_indent)
 # Get the text representing the contents and print it to the standard output.
 text = tocobj.get_toc()
 print(text)
