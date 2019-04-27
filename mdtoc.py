@@ -46,6 +46,12 @@ arg_parser.add_argument("-m", "--min-indent",
                         choices=range(1, 7),
                         default=1
                         )
+arg_parser.add_argument("-M", "--max-indent",
+                        help="Specify the maximum level of heading for which the list items will be indented. Headings above this level will not be indented any further; Thus, specifying 0 flattens the list. The default is 6.",
+                        type=int,
+                        choices=range(0, 7),
+                        default=6
+                        )
 
 
 # Parse the arguments passed to the script.
@@ -53,7 +59,7 @@ args = arg_parser.parse_args()
 
 # Create an MDTOC object with the parsed options.
 tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(
-    args.input, not args.no_links, args.min_indent)
+    args.input, not args.no_links, args.min_indent, args.max_indent)
 # Get the text representing the contents and print it to the standard output.
 text = tocobj.get_toc()
 print(text)
