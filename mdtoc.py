@@ -53,7 +53,7 @@ arg_parser.add_argument("-n", "--no-links",
                         help="Do not link the sections of the document to their list items in the table of contents.",
                         action="store_true"
                         )
-# This argument defines what file (default stdin) to read  the TOC from.
+# This argument defines what file (default stdout) to write   the TOC to.
 arg_parser.add_argument("-o", "--output",
                         help="The markdown file to write the table of contents to. The default is standard output.",
                         type=argparse.FileType('w'),
