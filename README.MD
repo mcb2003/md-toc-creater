@@ -9,7 +9,8 @@
 
 ```
     $ ./mdtoc.py -h
-usage: MD TOC [-h] [-n] [-m {1,2,3,4,5,6}] [-M {0,1,2,3,4,5,6}] [-x LEVEL]
+usage: MD TOC [-h] [-m {1,2,3,4,5,6}] [-M {0,1,2,3,4,5,6}] [-n] [-o OUTPUT]
+              [-x LEVEL]
               [input]
 
 Generate a table of contents for a markdown document
@@ -19,8 +20,6 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -n, --no-links        Do not link the sections of the document to their list
-                        items in the table of contents.
   -m {1,2,3,4,5,6}, --min-indent {1,2,3,4,5,6}
                         Specify the minimum level of heading for which the
                         list items will be indented. Headings at or below this
@@ -31,6 +30,11 @@ optional arguments:
                         list items will be indented. Headings above this level
                         will not be indented any further; Thus, specifying 0
                         flattens the list. The default is 6.
+  -n, --no-links        Do not link the sections of the document to their list
+                        items in the table of contents.
+  -o OUTPUT, --output OUTPUT
+                        The markdown file to write the table of contents to.
+                        The default is standard output.
   -x LEVEL, --exclude LEVEL
                         Specify specific levels of heading to exclude from the
                         table of contents. This option can be repeated to
