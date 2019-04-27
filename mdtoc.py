@@ -64,7 +64,8 @@ arg_parser.add_argument("-x", "--exclude",
                         help="Specify specific levels of heading to exclude from the table of contents. This option can be repeated to exclude multiple levels.",
                         metavar="LEVEL",
                         type=int,
-                        action="append"
+                        action="append",
+                        default=[]
                         )
 
 
