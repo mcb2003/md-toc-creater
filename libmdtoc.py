@@ -133,7 +133,11 @@ class MDTOC(object):
             # It is, so open a file with this path.
             file: IO['TextIO'] = open(file, "r")
         # We've got a file object regardless now, so return it's contents as a list of lines.
-        text: str = file.read()
+        # We're also trapping and gracefully exiting from keyboardInterrupts here, in case the file is stdin.
+        try:
+            text: str = file.read()
+        except KeyboardInterrupt:
+            exit(1)
         lines: Strings = text.split("\n")
         return lines
 
