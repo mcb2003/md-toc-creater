@@ -9,7 +9,8 @@
 
 ```
     $ ./mdtoc.py -h
-usage: MD TOC [-h] [-n] [-m {1,2,3,4,5,6}] [-M {0,1,2,3,4,5,6}] [input]
+usage: MD TOC [-h] [-n] [-m {1,2,3,4,5,6}] [-M {0,1,2,3,4,5,6}] [-x LEVEL]
+              [input]
 
 Generate a table of contents for a markdown document
 
@@ -30,6 +31,10 @@ optional arguments:
                         list items will be indented. Headings above this level
                         will not be indented any further; Thus, specifying 0
                         flattens the list. The default is 6.
+  -x LEVEL, --exclude LEVEL
+                        Specify specific levels of heading to exclude from the
+                        table of contents. This option can be repeated to
+                        exclude multiple levels.
 
 Submit any bugs to https://github.com/mcb2003/md-toc-creater/issues/new
 ```
