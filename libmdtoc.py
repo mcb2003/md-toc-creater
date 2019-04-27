@@ -83,11 +83,12 @@ class MDTOCItem(object):
 
 class MDTOC(object):
     # Define the constructor function.
-    def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6):
+    def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = []):
         # Set some important properties.
         self.linked: bool = linked
         self.min_indent: int = max(0, min_indent)
         self.max_indent: int = max(0, max_indent)
+        self.excluded_levels: List[int] = excluded_levels
         # Set the lines' property based on the return value of the get_file_contents function.
         self.lines: Strings = self.get_file_contents(file)
         # Create the regexp object used to match lines.
@@ -125,7 +126,10 @@ class MDTOC(object):
             whitespace_re = re.compile("\s")
             words: Strings = whitespace_re.split(heading)
             level: int = len(words[0])
-            # Next, create an MDTOCItem object representing this item.
+            # If this level of heading has been excluded, continue and ignore it.
+            if level in self.excluded_levels:
+                continue
+            # Otherwise, create an MDTOCItem object representing this item.
             li: MDTOCItem = MDTOCItem(
                 level, words[1:], self.min_indent, self.max_indent)
             items.append(li)
