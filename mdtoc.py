@@ -34,14 +34,16 @@ arg_parser.add_argument("input",
                         default=sys.stdin,
                         nargs="?"
                         )
-# This argument defines the minimum heading level for which the indentation will be 0. Headings at or below this level will not be indented.
+# This argument defines the minimum heading level for which the indentation will be 0.
+# Headings at or below this level will not be indented.
 arg_parser.add_argument("-m", "--min-indent",
                         help="Specify the minimum level of heading for which the list items will be indented. Headings at or below this level will not be indented and the rest of the heading levels will be adjusted accordingly. The default is 1.",
                         type=int,
                         choices=range(1, 7),
                         default=1
                         )
-# This argument specifies the maximum level of heading for which the list items will be indented. Headings above this level will not be indented any further; Thus, specifying 0 flattens the list.
+# This argument specifies the maximum level of heading for which the list items will be indented.
+# Headings above this level will not be indented any further; Thus, specifying 0 flattens the list.
 arg_parser.add_argument("-M", "--max-indent",
                         help="Specify the maximum level of heading for which the list items will be indented. Headings above this level will not be indented any further; Thus, specifying 0 flattens the list. The default is 6.",
                         type=int,
@@ -59,7 +61,8 @@ arg_parser.add_argument("-o", "--output",
                         type=argparse.FileType('w'),
                         default=sys.stdout
                         )
-# This argument allows the exclusion of specific heading levels from the TOC. It can be repeated to exclude multiple levels.
+# This argument allows the exclusion of specific heading levels from the TOC.
+# It can be repeated to exclude multiple levels.
 arg_parser.add_argument("-x", "--exclude",
                         help="Specify specific levels of heading to exclude from the table of contents. This option can be repeated to exclude multiple levels.",
                         metavar="LEVEL",
@@ -75,6 +78,6 @@ args = arg_parser.parse_args()
 # Create an MDTOC object with the parsed options.
 tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(
     args.input, not args.no_links, args.min_indent, args.max_indent, args.exclude)
-# Get the text representing the contents and print it to the standard output.
+# Get the text representing the contents and print it to the standard output or the specified file.
 text = tocobj.get_toc()
 print(text, file=args.output)
