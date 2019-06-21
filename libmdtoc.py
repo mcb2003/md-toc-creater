@@ -31,9 +31,8 @@ Strings = List[str]
 File = Union[str, IO['TextIO']]
 
 # Create the MDTOCItem class, which represents an item on the table of contents.
-
-
 class MDTOCItem(object):
+
     # This is the constructor function, which sets up the object.
     def __init__(self, level: int, title: Strings, min_indent: int = 1, max_indent: int = 6):
         # Set some important properties.
@@ -41,7 +40,8 @@ class MDTOCItem(object):
         self.level: int = level
         self.min_indent: int = max(0, min_indent)
         self.max_indent: int = max(0, max_indent)
-        # This computed physical level is the actual indentation level of the item, with min and max indents taken into account.
+        # This computed physical level is the actual indentation level of the item,
+        # with min and max indents taken into account.
         self.physical_level: int = min(
             self.level - self.min_indent, self.max_indent)
 
@@ -79,9 +79,8 @@ class MDTOCItem(object):
         return whitespace + "* [" + title_text + "](" + title_reference + ")"
 
 # Create the MDTOC class, which handles everything to do with the table of contents.
-
-
 class MDTOC(object):
+
     # Define the constructor function.
     def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = []):
         # Set some important properties.
@@ -92,7 +91,7 @@ class MDTOC(object):
         # Set the lines' property based on the return value of the get_file_contents function.
         self.lines: Strings = self.get_file_contents(file)
         # Create the regexp object used to match lines.
-        self.heading_re = re.compile("^\\s*#+\\s.*$")
+        self.heading_re: re.Pattern = re.compile("^\\s*#+\\s.*$")
 # Call the 'get_headings' function to get all headings from the document.
         # This list will hold each matched line.
         self.headings: Strings = self.get_headings()
@@ -108,7 +107,7 @@ class MDTOC(object):
             # Trim out any unneeded whitespace.
             line = line.strip()
             # Match the line to the heading re.
-            match = self.heading_re.match(line)
+            match: re.Match = self.heading_re.match(line)
             # Check if this line matches the heading pattern.
             if bool(match) == True:
                 # We have a match, so add it to our list of headings.
@@ -116,15 +115,16 @@ class MDTOC(object):
 # Return the list of headings.
         return headings
 
-    # This function generates and returns a list of MDTOCItem objects to be used to generate the table of contents.
+    # This function generates and returns a list of MDTOCItem objects
+    # to be used to generate the table of contents.
     def get_items(self) -> List[MDTOCItem]:
         # Initialise the items list.
         items: List[MDTOCItem] = []
         # Now that we have all the headings in the document, loop through them.
         for heading in self.headings:
             # Find out what level of heading this is by getting the amount of '#' characters at the start.
-            whitespace_re = re.compile("\s")
-            words: Strings = whitespace_re.split(heading)
+            whitespace_re: re.Pattern = re.compile("\s")
+            words: Strings = whitespace_re.split(heading.strip())
             level: int = len(words[0])
             # If this level of heading has been excluded, continue and ignore it.
             if level in self.excluded_levels:
