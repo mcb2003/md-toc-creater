@@ -57,13 +57,19 @@ arg_parser.add_argument("-n", "--no-links",
                         )
 # This argument defines what file (default stdout) to write   the TOC to.
 arg_parser.add_argument("-o", "--output",
-                        help="The markdown file to write the table of contents to. The default is standard output.",
+        help="The markdown file to write the table of contents to. The default is standard output.",
                         type=argparse.FileType('w'),
                         default=sys.stdout
                         )
+# This argument allows a different separator string to be defined.
+arg_parser.add_argument("-s", "--separator",
+        help="Specifies a string to be used as the separator between the '*' character and the succeeding list item (default: ' ').",
+type=str,
+default=" "
+)
 # This argument allows a different whitespace string to be defined.
 arg_parser.add_argument("-w", "--whitespace",
-help="Specify the characters used as whitespace before each item. This is repeated or omitted depending on the indentation level of each item.",
+help="Specify the characters used as whitespace before each item. This is repeated or omitted depending on the indentation level of each item. (default: '\t')",
 type=str,
 default="\t"
 )
