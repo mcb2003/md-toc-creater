@@ -79,5 +79,5 @@ args = arg_parser.parse_args()
 tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(
     args.input, not args.no_links, args.min_indent, args.max_indent, args.exclude)
 # Get the text representing the contents and print it to the standard output or the specified file.
-text = tocobj.get_toc()
+text: str = tocobj.get_toc()
 print(text, file=args.output)
