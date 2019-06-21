@@ -61,6 +61,12 @@ arg_parser.add_argument("-o", "--output",
                         type=argparse.FileType('w'),
                         default=sys.stdout
                         )
+# This argument allows a different whitespace string to be defined.
+arg_parser.add_argument("-w", "--whitespace",
+help="Specify the characters used as whitespace before each item. This is repeated or omitted depending on the indentation level of each item.",
+type=str,
+default="\t"
+)
 # This argument allows the exclusion of specific heading levels from the TOC.
 # It can be repeated to exclude multiple levels.
 arg_parser.add_argument("-x", "--exclude",
@@ -71,13 +77,12 @@ arg_parser.add_argument("-x", "--exclude",
                         default=[]
                         )
 
-
 # Parse the arguments passed to the script.
 args = arg_parser.parse_args()
 
 # Create an MDTOC object with the parsed options.
 tocobj: libmdtoc.MDTOC = libmdtoc.MDTOC(
-    args.input, not args.no_links, args.min_indent, args.max_indent, args.exclude)
+    args.input, not args.no_links, args.min_indent, args.max_indent, args.exclude, args.whitespace)
 # Get the text representing the contents and print it to the standard output or the specified file.
 text: str = tocobj.get_toc()
 print(text, file=args.output)
