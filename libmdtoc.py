@@ -34,13 +34,14 @@ File = Union[str, IO['TextIO']]
 class MDTOCItem(object):
 
     # This is the constructor function, which sets up the object.
-    def __init__(self, level: int, title: Strings, min_indent: int = 1, max_indent: int = 6, whitespace: str = "\t"):
+    def __init__(self, level: int, title: Strings, min_indent: int = 1, max_indent: int = 6, whitespace: str = "\t", separator: str = ' '):
         # Set some important properties.
         self.title: Strings = title
         self.level: int = level
         self.min_indent: int = max(0, min_indent)
         self.max_indent: int = max(0, max_indent)
         self.whitespace: str =whitespace
+        self.separator: str =separator
         # This computed physical level is the actual indentation level of the item,
         # with min and max indents taken into account.
         self.physical_level: int = min(
@@ -66,7 +67,7 @@ class MDTOCItem(object):
 # Next, create white space based on the computed physical level.
         whitespace: str = self.whitespace * self.physical_level
 # Finally, return the full list item.
-        return whitespace + "* " + title_text
+        return whitespace + "*" + self.separator + title_text
 
     # This function returns a linked list item representing this list item.
     def get_list_item_linked(self) -> str:
@@ -77,19 +78,20 @@ class MDTOCItem(object):
 # Next, create white space based on the computed physical level.
         whitespace: str = "\t" * self.physical_level
 # Finally, return the full list item.
-        return whitespace + "* [" + title_text + "](" + title_reference + ")"
+        return whitespace + "*" + self.separator + "[" + title_text + "](" + title_reference + ")"
 
 # Create the MDTOC class, which handles everything to do with the table of contents.
 class MDTOC(object):
 
     # Define the constructor function.
-    def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = [], whitespace: str = "\t"):
+    def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = [], whitespace: str = "\t", separator: str = " "):
         # Set some important properties.
         self.linked: bool = linked
         self.min_indent: int = max(0, min_indent)
         self.max_indent: int = max(0, max_indent)
         self.excluded_levels: List[int] = excluded_levels
         self.whitespace: str =whitespace
+        self.separator: str =separator
         # Set the lines' property based on the return value of the get_file_contents function.
         self.lines: Strings = self.get_file_contents(file)
         # Create the regexp object used to match lines.
@@ -133,7 +135,7 @@ class MDTOC(object):
                 continue
             # Otherwise, create an MDTOCItem object representing this item.
             li: MDTOCItem = MDTOCItem(
-                level, words[1:], self.min_indent, self.max_indent, self.whitespace)
+                level, words[1:], self.min_indent, self.max_indent, self.whitespace, self.separator)
             items.append(li)
         # Finally, return the list of list items.
         return items
