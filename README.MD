@@ -4,14 +4,11 @@
 
 ## Introduction
 
-  MD TOC is a tool written in python that adheres to the old
-  unix-philosophy of doing one thing and one thing well. It reads
-  a given markdown file (or standard input) and produces a table of
-  contents, with or without links, for the given markdown document, in
-  markdown format, based on any headings that may exist in the document,
-  as well as their level. The list items within the table of contents
-  are indented depending on the heading level. How much each level is
-  indented is also determined by the min-heading-indent option.
+  md-toc-creator is a tool written in python that adheres to the old
+  Unix philosophy of doing one thing and one thing well. It reads a given
+  markdown file (or standard input) and produces a table of contents. The
+  TOC can be generated  with or without links, in markdown format, based
+  on any headings that may exist in the document, as well as their level.
 
 ## Usage Information
 

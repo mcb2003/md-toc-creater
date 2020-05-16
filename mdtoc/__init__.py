@@ -24,7 +24,7 @@ def main() -> int:
                                          description="""Generate a table of
                                          contents for a markdown document""",
                                          epilog="""Submit any bugs to
-                                         https://github.com/mcb2003/md-toc-creater/issues/new"""
+                                         https://github.com/mcb2003/md-toc-creator/issues/new"""
                                          )
     # This argument defines what file (default stdin) to read  the TOC from.
     arg_parser.add_argument("input",
