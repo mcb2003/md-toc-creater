@@ -2,21 +2,20 @@
 
 """
     mdtoc: Generates a table of contents for a markdown document in markdown.
-    Copyright (C) 2019 Michael Connor Buchan
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
     """
+    #This program is free software: you can redistribute it and/or modify
+    #it under the terms of the GNU General Public License as published by
+    #the Free Software Foundation, either version 3 of the License, or
+    #(at your option) any later version.
+#
+    #This program is distributed in the hope that it will be useful,
+    #but WITHOUT ANY WARRANTY; without even the implied warranty of
+    #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    #GNU General Public License for more details.
+#
+    #You should have received a copy of the GNU General Public License
+    #along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 # import the sys module for standard IO and the re module for parsing regular expressions.
 import sys
@@ -26,6 +25,15 @@ from os import linesep
 
 # Import some bits and pieces from the typing module to be used with type hints
 from typing import List, IO, Union
+
+__author__ = "Michael Connor Buchan"
+__copyright__ = "Copyright (C) 2019-2020" + __author__
+__credits__ = __author__
+__license__ = "GPL-3.0-OR-LATER"
+__version__ = "1.4-pre"
+__maintainer__ = __author__
+__email__ = "mikeybuchan@hotmail.co.uk"
+__status__ = "Production"
 
 # This variable is a type hint alias that defines a list of words.
 Strings = List[str]
