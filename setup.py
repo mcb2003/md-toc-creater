@@ -19,7 +19,13 @@ setuptools.setup(
          },
      classifiers=[
          "Programming Language :: Python :: 3",
-         "License :: OSI Approved :: GPL License",
+         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+         "Environment :: Console",
          "Operating System :: OS Independent",
+         "Development Status :: 5 - Production/Stable",
+         "Intended Audience :: Developers",
+         "Natural Language :: English",
+         "Topic :: Text Processing :: Markup",
+         "Topic :: Text Editors :: Text Processing",
      ],
  )
