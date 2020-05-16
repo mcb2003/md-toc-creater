@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
-#    mdtoc: Generates a table of contents for a markdown document in markdown.
-#    Copyright (C) 2019 Michael Connor Buchan
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+    mdtoc: Generates a table of contents for a markdown document in markdown.
+    Copyright (C) 2019 Michael Connor Buchan
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    """
 
 # import the sys module for standard IO and the re module for parsing regular expressions.
 import sys
@@ -30,11 +32,10 @@ Strings = List[str]
 # This alias specifies a type of either a file object or a string (path to a file).
 File = Union[str, IO['TextIO']]
 
-# Create the MDTOCItem class, which represents an item on the table of contents.
 class MDTOCItem(object):
-
-    # This is the constructor function, which sets up the object.
+    """ Represents an item of a table of contents. """
     def __init__(self, level: int, title: Strings, min_indent: int = 1, max_indent: int = 6, whitespace: str = "\t", separator: str = ' '):
+        """ Sets up the object """
         # Set some important properties.
         self.title: Strings = title
         self.level: int = level
@@ -47,8 +48,8 @@ class MDTOCItem(object):
         self.physical_level: int = min(
             self.level - self.min_indent, self.max_indent)
     
-# This function returns a non-linked list item representing this list item.
     def get_list_item_nonlinked(self) -> str:
+        """ Returns a non-linked list item representing this TOC item. """
         # First, get a textual representation of the title.
         title_text: str = ' '.join(self.title)
 # Next, create white space based on the computed physical level.
@@ -56,8 +57,8 @@ class MDTOCItem(object):
 # Finally, return the full list item.
         return f"{whitespace}*{self.separator}{title_text}"
 
-    # This function returns a linked list item representing this list item.
     def get_list_item_linked(self) -> str:
+        """ Returns a linked list item representing this TOC item. """
         # First, get a textual representation of the title.
         title_text: str = ' '.join(self.title)
 # Also, get a textual representation of a link reference to this heading.
@@ -67,11 +68,10 @@ class MDTOCItem(object):
 # Finally, return the full list item.
         return f"{whitespace}*{self.separator}[{title_text}]({title_reference})"
 
-# Create the MDTOC class, which handles everything to do with the table of contents.
 class MDTOC(object):
-
-    # Define the constructor function.
+    """ Parses the markdown document and creates an array of MDTOCItem objects representing each TOC item. """
     def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = [], whitespace: str = "\t", separator: str = " "):
+        """ Create a new MDToOC object, automatically parsing the input file. """
         # Set some important properties.
         self.linked: bool = linked
         self.min_indent: int = max(0, min_indent)
@@ -89,8 +89,8 @@ class MDTOC(object):
         # Next, get a list of MDTOCItems using the 'get_items' function.
         self.items = self.get_items()
 
-# This function uses the pre-defined re to find all headings within the markdown document.
     def get_headings(self) -> Strings:
+        """ Uses the pre-defined regular expression to find all headings within the markdown document. """
         # Initialise the list of headings.
         headings: Strings = []
         # Loop through all the lines of the file.
@@ -106,9 +106,8 @@ class MDTOC(object):
 # Return the list of headings.
         return headings
 
-    # This function generates and returns a list of MDTOCItem objects
-    # to be used to generate the table of contents.
     def get_items(self) -> List[MDTOCItem]:
+        """ This function generates and returns a list of MDTOCItem objects to be used to generate the table of contents. """
         # Initialise the items list.
         items: List[MDTOCItem] = []
         # Now that we have all the headings in the document, loop through them.
@@ -127,8 +126,8 @@ class MDTOC(object):
         # Finally, return the list of list items.
         return items
 
-# This function takes either a path or a file object, returning always the file's contents.
     def get_file_contents(self, file: File) -> Strings:
+        """ Takes either a path or a file object, returning the file's contents. """
         # Check if the passed 'file' argument is a string.
         if type(file) == str:
             # It is, so open a file with this path.
@@ -142,8 +141,8 @@ class MDTOC(object):
         lines: Strings = text.split("\n")
         return lines
 
-    # This function returns the markdown representation of the table of contents.
     def get_toc(self) -> Strings:
+        """ Returns the markdown representation of the table of contents. """
         # Initiate the text variable to hold the returned TOC.
         text: str = ""
         # Loop through all of the list items in the items list.
