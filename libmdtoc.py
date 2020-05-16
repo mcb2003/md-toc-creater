@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
 
 """
     mdtoc: Generates a table of contents for a markdown document in markdown.
