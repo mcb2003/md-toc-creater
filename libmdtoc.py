@@ -82,7 +82,7 @@ class MDTOC(object):
         # Set the lines' property based on the return value of the get_file_contents function.
         self.lines: Strings = self.get_file_contents(file)
         # Create the regexp object used to match lines.
-        self.heading_re: re.Pattern = re.compile("^\\s*#+\\s.*$")
+        self.heading_re: re.Pattern = re.compile(r"^\s*#+\s.*$")
 # Call the 'get_headings' function to get all headings from the document.
         # This list will hold each matched line.
         self.headings: Strings = self.get_headings()
@@ -107,7 +107,7 @@ class MDTOC(object):
         return headings
 
     def get_items(self) -> List[MDTOCItem]:
-        """ This function generates and returns a list of MDTOCItem objects to be used to generate the table of contents. """
+        """ generates and returns a list of MDTOCItem objects to be used to generate the table of contents. """
         # Initialise the items list.
         items: List[MDTOCItem] = []
         # Now that we have all the headings in the document, loop through them.
