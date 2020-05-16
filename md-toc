@@ -18,7 +18,7 @@ __maintainer__ = __author__
 __email__ = "mikeybuchan@hotmail.co.uk"
 __status__ = "Production"
 
-if __name__ == "__main__":
+def main() -> int:
     # Create an ArgumentParser object to parse the command line arguments.
     arg_parser = argparse.ArgumentParser("MD TOC",
                                          description="""Generate a table of
@@ -113,3 +113,7 @@ if __name__ == "__main__":
     # or the specified file.
     text: str = tocobj.get_toc()
     print(text, file=args.output)
+    return 0
+
+if __name__ == "__main__":
+    main()
