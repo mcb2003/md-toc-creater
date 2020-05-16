@@ -24,8 +24,9 @@ import re
 # We'll also need the line separator which varies depending on your operating system.
 from os import linesep
 
-# Import some bits and pieces from the typing module to be used with type hints
-from typing import List, IO, Union
+# Import some bits and pieces from the typing module to be used with type hints.
+from typing import List, IO, Union, Type
+from types import FunctionType
 
 __author__ = "Michael Connor Buchan"
 __copyright__ = "Copyright (C) 2019-2020" + __author__
@@ -36,10 +37,16 @@ __maintainer__ = __author__
 __email__ = "mikeybuchan@hotmail.co.uk"
 __status__ = "Production"
 
-# This variable is a type hint alias that defines a list of words.
-Strings = List[str]
-# This alias specifies a type of either a file object or a string (path to a file).
-File = Union[str, IO['TextIO']]
+Strings: 'defines a list of words' = List[str]
+File: 'defines Either a path of a file object' = Union[str, IO['TextIO']]
+
+def annotate(name: str, type: Type, description: str = "") -> FunctionType:
+    """ Adds annotations to a function. """
+    def annotator(func: FunctionType) -> FunctionType:
+        """ Adds the specified annotation to a function. """
+        func.__annotations__[name] = { 'type': type, 'help': description.strip() }
+        return func
+    return annotator
 
 class MDTOCItem(object):
     """ Represents an item of a table of contents. """
