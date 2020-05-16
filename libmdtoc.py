@@ -63,7 +63,7 @@ class MDTOCItem(object):
 # Also, get a textual representation of a link reference to this heading.
         title_reference: str = "#" + '-'.join(self.title).lower()
 # Next, create white space based on the computed physical level.
-        whitespace: str = "\t" * self.physical_level
+        whitespace: str = self.whitespace * self.physical_level
 # Finally, return the full list item.
         return f"{whitespace}*{self.separator}[{title_text}]({title_reference})"
 
