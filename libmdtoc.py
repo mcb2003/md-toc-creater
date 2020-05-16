@@ -41,20 +41,10 @@ Strings: 'defines a list of words' = List[str]
 File: 'defines Either a path of a file object' = Union[str, IO['TextIO']]
 
 
-def annotate(name: str, arg_type: Type, description: str = "") -> FunctionType:
-    """ Adds annotations to a function. """
-    def annotator(func: FunctionType) -> FunctionType:
-        """ Adds the specified annotation to a function. """
-        func.__annotations__[name] = {
-            'type': arg_type, 'help': description.strip()}
-        return func
-    return annotator
-
-
 def get_file_contents(file: File) -> Strings:
     """ Takes either a path or a file object, returning the file's contents. """
     # Check if the passed 'file' argument is a string.
-    if isinstance(file) == str:
+    if isinstance(file, str):
         # It is, so open a file with this path.
         file: IO['TextIO'] = open(file, "r")
     # We've got a file object regardless now, so return it's contents as a list of lines.
