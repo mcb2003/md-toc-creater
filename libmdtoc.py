@@ -46,39 +46,26 @@ class MDTOCItem(object):
         # with min and max indents taken into account.
         self.physical_level: int = min(
             self.level - self.min_indent, self.max_indent)
-
-# This function joins a given list of strings with a given separator.
-    def join(self, words: Strings, separator: str = " ") -> str:
-        # Initialise the text variable to an empty string.
-        text: str = ""
-        # Loop through each of the words.
-        for word in words:
-            # Append the word, as well as a proceeding separator, to the text variable.
-            text += separator + word
-        # Remove the first proceeding separator from text and then return it.
-        separator_end: int = len(separator)
-        text = text[separator_end:]
-        return text
-
+    
 # This function returns a non-linked list item representing this list item.
     def get_list_item_nonlinked(self) -> str:
         # First, get a textual representation of the title.
-        title_text: str = self.join(self.title, " ")
+        title_text: str = ' '.join(self.title)
 # Next, create white space based on the computed physical level.
         whitespace: str = self.whitespace * self.physical_level
 # Finally, return the full list item.
-        return whitespace + "*" + self.separator + title_text
+        return f"{whitespace}*{self.separator}{title_text}"
 
     # This function returns a linked list item representing this list item.
     def get_list_item_linked(self) -> str:
         # First, get a textual representation of the title.
-        title_text: str = self.join(self.title, " ")
+        title_text: str = ' '.join(self.title)
 # Also, get a textual representation of a link reference to this heading.
-        title_reference: str = "#" + self.join(self.title, "-").lower()
+        title_reference: str = "#" + '-'.join(self.title).lower()
 # Next, create white space based on the computed physical level.
         whitespace: str = "\t" * self.physical_level
 # Finally, return the full list item.
-        return whitespace + "*" + self.separator + "[" + title_text + "](" + title_reference + ")"
+        return f"{whitespace}*{self.separator}[{title_text}]({title_reference})"
 
 # Create the MDTOC class, which handles everything to do with the table of contents.
 class MDTOC(object):
