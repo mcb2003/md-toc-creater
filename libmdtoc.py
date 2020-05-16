@@ -4,18 +4,18 @@
 """
     mdtoc: Generates a table of contents for a markdown document in markdown.
     """
-    #This program is free software: you can redistribute it and/or modify
-    #it under the terms of the GNU General Public License as published by
-    #the Free Software Foundation, either version 3 of the License, or
-    #(at your option) any later version.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-    #This program is distributed in the hope that it will be useful,
-    #but WITHOUT ANY WARRANTY; without even the implied warranty of
-    #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    #GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-    #You should have received a copy of the GNU General Public License
-    #along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 # import the sys module for standard IO and the re module for parsing regular expressions.
@@ -40,30 +40,54 @@ __status__ = "Production"
 Strings: 'defines a list of words' = List[str]
 File: 'defines Either a path of a file object' = Union[str, IO['TextIO']]
 
-def annotate(name: str, type: Type, description: str = "") -> FunctionType:
+
+def annotate(name: str, arg_type: Type, description: str = "") -> FunctionType:
     """ Adds annotations to a function. """
     def annotator(func: FunctionType) -> FunctionType:
         """ Adds the specified annotation to a function. """
-        func.__annotations__[name] = { 'type': type, 'help': description.strip() }
+        func.__annotations__[name] = {
+            'type': arg_type, 'help': description.strip()}
         return func
     return annotator
 
-class MDTOCItem(object):
+
+def get_file_contents(file: File) -> Strings:
+    """ Takes either a path or a file object, returning the file's contents. """
+    # Check if the passed 'file' argument is a string.
+    if isinstance(file) == str:
+        # It is, so open a file with this path.
+        file: IO['TextIO'] = open(file, "r")
+    # We've got a file object regardless now, so return it's contents as a list of lines.
+    # We're also trapping and gracefully exiting from keyboardInterrupts
+    # here, in case the file is stdin.
+    try:
+        text: str = file.read()
+    except KeyboardInterrupt:
+        sys.exit(1)
+    lines: Strings = text.split("\n")
+    return lines
+
+
+class MDTOCItem:
     """ Represents an item of a table of contents. """
-    def __init__(self, level: int, title: Strings, min_indent: int = 1, max_indent: int = 6, whitespace: str = "\t", separator: str = ' '):
+
+    def __init__(
+            self, level: int, title: Strings,
+            min_indent: int = 1, max_indent: int = 6,
+            whitespace: str = "\t", separator: str = ' '):
         """ Sets up the object """
         # Set some important properties.
         self.title: Strings = title
         self.level: int = level
         self.min_indent: int = max(0, min_indent)
         self.max_indent: int = max(0, max_indent)
-        self.whitespace: str =whitespace
-        self.separator: str =separator
+        self.whitespace: str = whitespace
+        self.separator: str = separator
         # This computed physical level is the actual indentation level of the item,
         # with min and max indents taken into account.
         self.physical_level: int = min(
             self.level - self.min_indent, self.max_indent)
-    
+
     def get_list_item_nonlinked(self) -> str:
         """ Returns a non-linked list item representing this TOC item. """
         # First, get a textual representation of the title.
@@ -84,19 +108,25 @@ class MDTOCItem(object):
 # Finally, return the full list item.
         return f"{whitespace}*{self.separator}[{title_text}]({title_reference})"
 
-class MDTOC(object):
-    """ Parses the markdown document and creates an array of MDTOCItem objects representing each TOC item. """
-    def __init__(self, file: File, linked: bool = False, min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = [], whitespace: str = "\t", separator: str = " "):
-        """ Create a new MDToOC object, automatically parsing the input file. """
+
+class MDTOC:
+    """ Parses the markdown document and creates an array of MDTOCItem objects
+        representing each TOC item. """
+
+    def __init__(
+            self, file: File, linked: bool = False,
+            min_indent: int = 1, max_indent: int = 6, excluded_levels: List[int] = [],
+            whitespace: str = "\t", separator: str = " "):
+        """ Create a new MDTOC object, automatically parsing the input file. """
         # Set some important properties.
         self.linked: bool = linked
         self.min_indent: int = max(0, min_indent)
         self.max_indent: int = max(0, max_indent)
         self.excluded_levels: List[int] = excluded_levels
-        self.whitespace: str =whitespace
-        self.separator: str =separator
+        self.whitespace: str = whitespace
+        self.separator: str = separator
         # Set the lines' property based on the return value of the get_file_contents function.
-        self.lines: Strings = self.get_file_contents(file)
+        self.lines: Strings = get_file_contents(file)
         # Create the regexp object used to match lines.
         self.heading_re: re.Pattern = re.compile(r"^\s*#+\s.*$")
 # Call the 'get_headings' function to get all headings from the document.
@@ -106,7 +136,8 @@ class MDTOC(object):
         self.items = self.get_items()
 
     def get_headings(self) -> Strings:
-        """ Uses the pre-defined regular expression to find all headings within the markdown document. """
+        """ Uses the pre-defined regular expression to find all headings within
+            the markdown document. """
         # Initialise the list of headings.
         headings: Strings = []
         # Loop through all the lines of the file.
@@ -116,20 +147,22 @@ class MDTOC(object):
             # Match the line to the heading re.
             match: re.Match = self.heading_re.match(line)
             # Check if this line matches the heading pattern.
-            if bool(match) == True:
+            if bool(match):
                 # We have a match, so add it to our list of headings.
                 headings.append(line)
 # Return the list of headings.
         return headings
 
     def get_items(self) -> List[MDTOCItem]:
-        """ generates and returns a list of MDTOCItem objects to be used to generate the table of contents. """
+        """ Generates and returns a list of MDTOCItem objects to be used to
+            generate the table of contents. """
         # Initialise the items list.
         items: List[MDTOCItem] = []
         # Now that we have all the headings in the document, loop through them.
         for heading in self.headings:
-            # Find out what level of heading this is by getting the amount of '#' characters at the start.
-            whitespace_re: re.Pattern = re.compile("\s")
+            # Find out what level of heading this is by getting the amount of
+            # '#' characters at the start.
+            whitespace_re: re.Pattern = re.compile(r"\s")
             words: Strings = whitespace_re.split(heading.strip())
             level: int = len(words[0])
             # If this level of heading has been excluded, continue and ignore it.
@@ -141,21 +174,6 @@ class MDTOC(object):
             items.append(li)
         # Finally, return the list of list items.
         return items
-
-    def get_file_contents(self, file: File) -> Strings:
-        """ Takes either a path or a file object, returning the file's contents. """
-        # Check if the passed 'file' argument is a string.
-        if type(file) == str:
-            # It is, so open a file with this path.
-            file: IO['TextIO'] = open(file, "r")
-        # We've got a file object regardless now, so return it's contents as a list of lines.
-        # We're also trapping and gracefully exiting from keyboardInterrupts here, in case the file is stdin.
-        try:
-            text: str = file.read()
-        except KeyboardInterrupt:
-            exit(1)
-        lines: Strings = text.split("\n")
-        return lines
 
     def get_toc(self) -> Strings:
         """ Returns the markdown representation of the table of contents. """
