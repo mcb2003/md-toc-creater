@@ -4,7 +4,7 @@ with open("README.MD", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
      name='md-toc-creator',  
-     version='1.4',
+     version='1.4.1',
      author="Michael Connor Buchan",
      author_email="mikeybuchan@hotmail.co.uk",
      description="Generates a table of contents for a markdown document in markdown.",
